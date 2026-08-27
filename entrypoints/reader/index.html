@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Reader — Transcript Tidy</title>
+  </head>
+  <body>
+    <a class="skip" href="#transcript">Skip to transcript</a>
+    <header class="topbar">
+      <a class="brand" href="https://transcript-tidy-reader.sociobot.in" target="_blank" rel="noreferrer"><span class="mark" aria-hidden="true"></span><span>Transcript Tidy</span></a>
+      <div class="top-actions">
+        <button id="settings-toggle" type="button" aria-expanded="false" aria-controls="settings">Reading settings</button>
+        <button id="print" type="button">Print</button>
+      </div>
+    </header>
+    <aside id="settings" hidden>
+      <h2>Reading settings</h2>
+      <fieldset>
+        <legend>Typeface</legend>
+        <div class="segmented">
+          <button type="button" data-font="serif" aria-pressed="true">Serif</button>
+          <button type="button" data-font="sans" aria-pressed="false">Sans</button>
+          <button type="button" data-font="mono" aria-pressed="false">Mono</button>
+        </div>
+      </fieldset>
+      <label for="font-size">Text size <output id="size-output">18 px</output></label>
+      <input id="font-size" type="range" min="16" max="26" value="18" />
+      <label for="line-height">Line spacing <output id="line-output">1.72</output></label>
+      <input id="line-height" type="range" min="140" max="210" value="172" />
+      <button id="theme" type="button">Use dark theme</button>
+    </aside>
+    <main>
+      <section id="empty" class="empty" hidden aria-labelledby="empty-title">
+        <p class="eyebrow">Nothing on the page yet</p>
+        <h1 id="empty-title">Open a video to begin.</h1>
+        <p>Choose a captioned YouTube or TED video, then use the Transcript Tidy extension button.</p>
+        <a class="button-link" href="https://www.youtube.com" target="_blank" rel="noreferrer">Find a captioned video</a>
+      </section>
+      <article id="document" hidden>
+        <header class="document-head">
+          <p class="eyebrow" id="source-kind"></p>
+          <h1 id="title"></h1>
+          <p class="meta" id="meta"></p>
+          <div class="document-actions">
+            <a id="source" class="button-link secondary" target="_blank" rel="noreferrer">Open original</a>
+            <button id="export-txt" type="button">Export text</button>
+            <button id="export-html" type="button">Export HTML</button>
+          </div>
+        </header>
+        <section class="find" aria-labelledby="find-label">
+          <label id="find-label" for="search">Find in transcript</label>
+          <div class="search-row">
+            <input id="search" type="search" autocomplete="off" placeholder="Try a phrase" />
+            <span id="match-count" aria-live="polite">0 matches</span>
+          </div>
+        </section>
+        <div id="transcript" class="transcript" tabindex="-1"></div>
+        <footer class="end-mark"><span aria-hidden="true">◆</span><p>You reached the end. The words remain yours, on this device.</p></footer>
+      </article>
+      <p class="toast" id="toast" role="status" aria-live="polite"></p>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

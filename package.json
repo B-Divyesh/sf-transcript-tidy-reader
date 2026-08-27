@@ -1,0 +1,28 @@
+{
+  "name": "transcript-tidy-reader",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:site": "vite --config vite.site.config.ts",
+    "clean": "node scripts/clean.mjs",
+    "build:extension": "wxt build && wxt zip",
+    "build:site": "vite build --config vite.site.config.ts",
+    "build": "npm run clean && npm run build:extension && npm run build:site && node scripts/package-extension.mjs",
+    "test": "vitest run && playwright test",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "wxt": "^0.20.7"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "1.58.2",
+    "typescript": "^5.8.2",
+    "vite": "^7.1.3",
+    "vitest": "^3.2.4"
+  }
+}
