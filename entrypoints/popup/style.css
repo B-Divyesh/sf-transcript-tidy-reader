@@ -1,4 +1,4 @@
-:root { color-scheme: light dark; --paper:#f3ecdd; --sheet:#fffdf6; --ink:#202724; --muted:#5d655f; --moss:#315e4a; --coral:#c74f3d; --danger:#9b302b; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+:root { color-scheme: light dark; --paper:#f3ecdd; --sheet:#fffdf6; --ink:#202724; --muted:#5d655f; --moss:#315e4a; --coral:#a23d31; --danger:#9b302b; font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
 * { box-sizing:border-box; }
 body { margin:0; min-width:360px; background:var(--paper); color:var(--ink); font-size:16px; }
 main { min-height:520px; padding:20px; background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 38%); }

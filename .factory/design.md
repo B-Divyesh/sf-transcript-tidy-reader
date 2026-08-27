@@ -15,7 +15,7 @@ The interface uses the illustration only in the landing-page story. Extension su
 | `ink` | `#202724` | `#F7F1E3` | primary text |
 | `muted` | `#5D655F` | `#BCC4BE` | secondary text |
 | `moss` | `#315E4A` | `#8EC6A5` | actions, focus, links |
-| `coral` | `#C74F3D` | `#FF8C77` | bookmark/accent |
+| `coral` | `#A23D31` | `#FF8C77` | bookmark/accent |
 | `ochre` | `#9A6819` | `#E9B65A` | warning |
 | `danger` | `#9B302B` | `#FF8F86` | errors |
 

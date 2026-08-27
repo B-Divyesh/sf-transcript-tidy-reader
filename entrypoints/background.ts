@@ -1,5 +1,3 @@
 export default defineBackground(() => {
-  browser.runtime.onInstalled.addListener(({ reason }) => {
-    if (reason === 'install') void browser.runtime.openOptionsPage().catch(() => undefined);
-  });
+  // MV3 worker reserved for future source adapters. Transcript processing stays in-page.
 });
