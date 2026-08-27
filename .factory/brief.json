@@ -1,0 +1,11 @@
+{
+  "slug": "transcript-tidy-reader",
+  "title": "Transcript Tidy",
+  "territory": "utilities",
+  "user": "People who absorb text better than video or audio, including ADHD users, who need an existing TED or YouTube transcript rendered as a stable, readable document.",
+  "smallest_useful_product": "Browser extension that detects an on-page transcript/caption track the user can already access, reflows it into paragraphs with headings and find-in-video links, and exports the user-visible text locally.",
+  "success_measure": "At least 60% of beta users finish reading three imported transcripts and use search or a timestamp jump in the first week.",
+  "artifact_class": "browser-extension",
+  "monetization": "one-time",
+  "constraints": "Respect site terms and user-visible caption availability; do not redistribute copyrighted transcripts; keep processing local and disclose unsupported sites."
+}
