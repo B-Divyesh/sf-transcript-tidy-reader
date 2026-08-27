@@ -45,8 +45,8 @@ Document transitions use 180–240 ms opacity and small vertical transforms; the
 
 ## Asset plan and provenance
 
-- `assets/src/reading-garden.png`: source illustration generated with the factory image model on 2026-08-27.
-- `site/public/assets/reading-garden-960.webp` and `reading-garden-1440.webp`: optimized derivatives for the landing page, both targeted below 300 KB.
+- `assets/src/reading-garden.png`: source illustration generated with the Azure AI Foundry `factory-image` deployment on 2026-08-27.
+- `site/public/assets/reading-garden-960.webp`, `reading-garden-1440.webp`, `reading-garden-1440.avif`, and the JPEG fallback: optimized landing-page derivatives, all below 300 KB.
 - Product mark and extension icons: original hand-authored SVG/CSS geometry derived from a folded page and bookmark; no stock icon set.
 
 ### Prompt sheet

@@ -48,7 +48,7 @@ restore.addEventListener('submit', async (event) => {
   event.preventDefault();
   licenseStatus.textContent = 'Checking license…';
   const result = await saveAndVerifyLicense(licenseInput.value);
-  licenseStatus.textContent = result.valid ? 'Plus is active on this device.' : 'That license could not be verified. Check the token and try again.';
+  licenseStatus.textContent = result.valid ? 'Plus is active on this device.' : result.reason;
   if (result.valid) licenseInput.value = '';
 });
 

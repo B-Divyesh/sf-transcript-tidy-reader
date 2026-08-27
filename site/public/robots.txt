@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://transcript-tidy-reader.sociobot.in/sitemap.xml

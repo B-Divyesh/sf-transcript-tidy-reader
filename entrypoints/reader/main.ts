@@ -6,6 +6,7 @@ const documentView = document.querySelector<HTMLElement>('#document')!;
 const emptyView = document.querySelector<HTMLElement>('#empty')!;
 const transcriptRoot = document.querySelector<HTMLElement>('#transcript')!;
 const title = document.querySelector<HTMLElement>('#title')!;
+const titleSlot = document.querySelector<HTMLElement>('#title-slot')!;
 const sourceKind = document.querySelector<HTMLElement>('#source-kind')!;
 const meta = document.querySelector<HTMLElement>('#meta')!;
 const source = document.querySelector<HTMLAnchorElement>('#source')!;
@@ -23,6 +24,7 @@ void browser.storage.local.get('activeTranscript').then(({ activeTranscript }) =
     return;
   }
   transcript = activeTranscript;
+  titleSlot.replaceWith(title);
   documentView.hidden = false;
   render(activeTranscript);
 });
@@ -124,7 +126,7 @@ document.querySelector<HTMLButtonElement>('#export-txt')!.addEventListener('clic
 document.querySelector<HTMLButtonElement>('#export-html')!.addEventListener('click', () => {
   if (!transcript) return;
   const body = transcript.paragraphs.map((paragraph) => `<p><a href="${escapeHtml(timestampUrl(transcript!, paragraph.startMs))}">${formatTimestamp(paragraph.startMs)}</a> ${escapeHtml(paragraph.text)}</p>`).join('');
-  download(`<!doctype html><html lang="en"><meta charset="utf-8"><title>${escapeHtml(transcript.title)}</title><main><h1>${escapeHtml(transcript.title)}</h1>${body}</main>`, 'html', 'text/html');
+  download(`<!doctype html><html lang="en"><meta charset="utf-8"><title>${escapeHtml(transcript.title)}</title><main><h1>${escapeHtml(transcript.title)}</h1>${body}</main></html>`, 'html', 'text/html');
 });
 
 function download(content: string, extension: string, type: string) {

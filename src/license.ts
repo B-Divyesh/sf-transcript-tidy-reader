@@ -18,7 +18,7 @@ export async function getLicenseState(): Promise<{ unlocked: boolean; reason?: s
 
   const fresh = verdict && Date.now() - verdict.checkedAt < DAY;
   if (!fresh && navigator.onLine) void verifyLicense(token);
-  return { unlocked: verdict?.valid ?? true, reason: verdict?.valid === false ? verdict.reason : undefined };
+  return { unlocked: verdict?.valid ?? false, reason: verdict?.valid === false ? verdict.reason : undefined };
 }
 
 export async function saveAndVerifyLicense(token: string): Promise<{ valid: boolean; reason: string }> {
@@ -37,6 +37,6 @@ async function verifyLicense(token: string): Promise<{ valid: boolean; reason: s
     await browser.storage.local.set({ [VERDICT_KEY]: { ...data, checkedAt: Date.now() } });
     return data;
   } catch {
-    return { valid: true, reason: 'Offline; using the saved license.' };
+    return { valid: false, reason: 'Verification is unavailable while offline.' };
   }
 }
