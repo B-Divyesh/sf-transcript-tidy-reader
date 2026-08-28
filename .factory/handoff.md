@@ -1,4 +1,21 @@
-# Transcript Tidy v1 handoff
+# Transcript Tidy — verification handoff
+
+## Verification status: **FAIL**
+
+Independent verification on 2026-08-28 of commit
+`b95d1aaeada0884fe1cc38b6dfedafc822957dbb` and
+<https://transcript-tidy-reader.sociobot.in/> failed. The exact evidence and
+reproduction commands are in [`.factory/verification.md`](verification.md).
+
+Release blockers: the live Chrome-extension ZIP returns HTTP 404, clean
+`npm ci` followed by the documented `npm run typecheck`/`npm test` cannot find
+`.wxt/tsconfig.json`, and the 390px reader has an axe serious unnamed header
+link. Do not release before all three are corrected and independently
+re-verified. No product code was changed during verification.
+
+---
+
+# Builder handoff (superseded by the verification result above)
 
 Work order: `transcript-tidy-reader-build-1`  
 Completed: 2026-08-27
