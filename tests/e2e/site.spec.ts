@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 
 test('landing page explains and downloads the product', async ({ page }) => {
   const consoleErrors: string[] = [];
@@ -9,9 +10,30 @@ test('landing page explains and downloads the product', async ({ page }) => {
   await expect(page.locator('h1')).toHaveCount(1);
   await expect(page.locator('h1')).toContainText('Give captions room to breathe');
   await expect(page.getByRole('link', { name: 'Download for Chrome' })).toHaveAttribute('href', '/downloads/transcript-tidy-chrome.zip');
+  const download = await page.request.get('/downloads/transcript-tidy-chrome.zip');
+  expect(download.status()).toBe(200);
+  expect(download.headers()['content-type']).toMatch(/application\/(zip|x-zip-compressed)/);
   await expect(page.locator('main')).toBeVisible();
   await expect(page.locator('.hero-art img')).toHaveAttribute('alt', /surreal garden/);
   expect(consoleErrors).toEqual([]);
+});
+
+test('footer legal links meet the touch-target baseline and AVIF has a deploy MIME type', async ({ page }) => {
+  await page.goto('/');
+  const legalLinks = page.getByRole('navigation', { name: 'Legal' }).getByRole('link');
+  for (const link of await legalLinks.all()) {
+    const box = await link.boundingBox();
+    expect(box, `${await link.textContent()} has a box`).not.toBeNull();
+    expect(box!.width).toBeGreaterThanOrEqual(44);
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+  }
+  const staticConfig = JSON.parse(await readFile('site/public/staticwebapp.config.json', 'utf8')) as {
+    mimeTypes?: Record<string, string>;
+  };
+  expect(staticConfig.mimeTypes?.['.avif']).toBe('image/avif');
+  const serviceWorker = await readFile('dist/site/sw.js', 'utf8');
+  expect(serviceWorker).toMatch(/const CACHE = 'transcript-tidy-site-[a-f0-9]{12}';/);
+  expect(serviceWorker).not.toContain('__BUILD_ID__');
 });
 
 test('landing page has no serious accessibility violations', async ({ page }) => {

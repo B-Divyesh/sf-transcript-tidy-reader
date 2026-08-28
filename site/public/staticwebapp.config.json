@@ -1,4 +1,7 @@
 {
+  "mimeTypes": {
+    ".avif": "image/avif"
+  },
   "routes": [
     {
       "route": "/assets/*",

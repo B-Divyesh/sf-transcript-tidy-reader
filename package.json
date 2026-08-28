@@ -4,23 +4,28 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "wxt prepare",
     "dev": "wxt",
     "dev:site": "vite --config vite.site.config.ts",
     "clean": "node scripts/clean.mjs",
     "build:extension": "wxt build && wxt zip",
-    "build:site": "vite build --config vite.site.config.ts",
+    "build:site": "vite build --config vite.site.config.ts && node scripts/revise-service-worker.mjs",
     "build": "npm run clean && npm run build:extension && npm run build:site && node scripts/package-extension.mjs",
-    "test": "vitest run && playwright test",
+    "test": "wxt prepare && vitest run && playwright test",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "wxt prepare && tsc --noEmit",
+    "lint": "wxt prepare && eslint ."
   },
-  "dependencies": {},
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
+    "@eslint/js": "^9.39.5",
     "@playwright/test": "1.58.2",
+    "eslint": "^9.39.5",
+    "globals": "^16.5.0",
     "playwright-core": "1.58.2",
     "typescript": "^5.8.2",
+    "typescript-eslint": "^8.68.0",
     "vite": "^7.1.3",
     "vitest": "^3.2.4",
     "wxt": "^0.20.7"

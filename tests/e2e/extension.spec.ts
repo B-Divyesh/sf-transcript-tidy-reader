@@ -54,3 +54,28 @@ test('extension captures a supplied caption track and opens a searchable reader'
     await context.close();
   }
 });
+
+test('reader header brand remains named when its text is visually compacted on mobile', async ({}, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile-390', 'Mobile reader accessibility regression runs at 390px.');
+  const extensionPath = resolve('.output/chrome-mv3');
+  const context = await chromium.launchPersistentContext('', {
+    channel: 'chromium',
+    headless: true,
+    viewport: { width: 390, height: 844 },
+    isMobile: true,
+    hasTouch: true,
+    args: [`--disable-extensions-except=${extensionPath}`, `--load-extension=${extensionPath}`]
+  });
+
+  try {
+    const worker = context.serviceWorkers()[0] ?? await context.waitForEvent('serviceworker', { timeout: 5_000 });
+    const extensionId = new URL(worker.url()).host;
+    const reader = await context.newPage();
+    await reader.goto(`chrome-extension://${extensionId}/reader.html`);
+    await expect(reader.getByRole('link', { name: 'Transcript Tidy' })).toBeVisible();
+    const axe = await new AxeBuilder({ page: reader }).analyze();
+    expect(axe.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''))).toEqual([]);
+  } finally {
+    await context.close();
+  }
+});

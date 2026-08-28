@@ -4,3 +4,4 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 :root{--coral:#a23d31;--ochre:#9a6819}.hero .eyebrow,.final-cta .eyebrow{color:#ff8c77}
 .detail-grid article{content-visibility:visible}
+.site-footer nav a{min-width:44px;min-height:44px;justify-content:center}
