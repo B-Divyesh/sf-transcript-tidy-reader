@@ -1,0 +1,51 @@
+[
+  {
+    "id": "download-package",
+    "claim": "Downloads a valid Chrome extension package.",
+    "where": "Landing-page download actions and README",
+    "test": "npm test -- --grep @claim:download-package",
+    "sandbox": "Fresh browser context; request the built download and verify HTTP 200, ZIP MIME, and ZIP signature."
+  },
+  {
+    "id": "reader-workflow",
+    "claim": "Turns an accessible caption track into readable paragraphs with search and timestamp links.",
+    "where": "Landing page, extension description, and README",
+    "test": "npm test -- --grep @claim:reader-workflow",
+    "sandbox": "Temporary extension profile with a routed YouTube page and recorded json3 caption fixture."
+  },
+  {
+    "id": "source-scope",
+    "claim": "Captures caption tracks that the visitor can access on YouTube and TED.",
+    "where": "Landing page, privacy policy, extension description, and README",
+    "test": "npm test -- --grep @claim:source-scope",
+    "sandbox": "Temporary extension profile with routed YouTube json3 and TED WebVTT fixtures; no live source account."
+  },
+  {
+    "id": "local-private",
+    "claim": "Transcript capture, reading, and search do not send transcript text to Transcript Tidy.",
+    "where": "Landing privacy section, privacy policy, and README",
+    "test": "npm test -- --grep @claim:local-private",
+    "sandbox": "Temporary extension profile; record the full workflow request log and allow only the routed source page and its caption track."
+  },
+  {
+    "id": "local-export",
+    "claim": "Exports the captured transcript as TXT and HTML in the browser.",
+    "where": "Landing reading-tools section and README",
+    "test": "npm test -- --grep @claim:local-export",
+    "sandbox": "Temporary extension profile with recorded caption fixture; download and inspect both export files."
+  },
+  {
+    "id": "plus-shelf",
+    "claim": "A one-time $12 Plus purchase keeps up to 50 recent reads on the device.",
+    "where": "Landing pricing section, terms, and README",
+    "test": "npm test -- --grep @claim:plus-shelf",
+    "sandbox": "Fresh site context plus 50 deterministic transcript objects; assert price, checkout route, insertion, eviction, and cap."
+  },
+  {
+    "id": "license-restore",
+    "claim": "A returned Plus license is stored locally and removed from the address bar.",
+    "where": "Landing pricing form and purchase return flow",
+    "test": "npm test -- --grep @claim:license-restore",
+    "sandbox": "Fresh browser context with a recorded valid Sociobot verification response; no live billing request."
+  }
+]

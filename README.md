@@ -29,7 +29,9 @@ npm run build
 
 ## Build outputs
 
-`npm run build` is the reproducible production command. It creates:
+`npm run build` is the reproducible production command. `npm run build:site`
+also rebuilds and packages the extension so a static-only deploy cannot omit
+the download. Both create:
 
 - `.output/chrome-mv3/` — unpacked Manifest V3 extension
 - `.output/transcript-tidy-reader-1.0.0-chrome.zip` — WXT package

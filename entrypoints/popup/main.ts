@@ -1,4 +1,5 @@
 import { CHECKOUT_URL, getLicenseState, saveAndVerifyLicense } from '../../src/license';
+import { addToShelf } from '../../src/shelf';
 import type { CaptureResult, Transcript } from '../../src/types';
 import './style.css';
 
@@ -61,6 +62,6 @@ async function saveToShelfWhenUnlocked(transcript: Transcript) {
   const { unlocked } = await getLicenseState();
   if (!unlocked) return;
   const { transcriptShelf = [] } = await browser.storage.local.get('transcriptShelf') as { transcriptShelf?: Transcript[] };
-  const next = [transcript, ...transcriptShelf.filter((item) => item.id !== transcript.id)].slice(0, 50);
+  const next = addToShelf(transcript, transcriptShelf);
   await browser.storage.local.set({ transcriptShelf: next });
 }
