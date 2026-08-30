@@ -1,6 +1,7 @@
 {
   "mimeTypes": {
-    ".avif": "image/avif"
+    ".avif": "image/avif",
+    ".zip": "application/zip"
   },
   "routes": [
     {
@@ -12,10 +13,16 @@
       "headers": { "cache-control": "public, max-age=3600" }
     }
   ],
+  "responseOverrides": {
+    "404": {
+      "rewrite": "/404.html"
+    }
+  },
   "globalHeaders": {
     "content-security-policy": "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; connect-src 'self' https://api.sociobot.in; object-src 'none'; base-uri 'self'; frame-ancestors 'none'",
     "referrer-policy": "strict-origin-when-cross-origin",
     "x-content-type-options": "nosniff",
-    "permissions-policy": "camera=(), microphone=(), geolocation=()"
+    "permissions-policy": "camera=(), microphone=(), geolocation=()",
+    "strict-transport-security": "max-age=31536000; includeSubDomains"
   }
 }

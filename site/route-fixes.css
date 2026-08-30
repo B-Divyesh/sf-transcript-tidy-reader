@@ -1,0 +1,9 @@
+.not-found .eyebrow { color: #ff8c77; }
+.demo-controls > * { min-width: 0; }
+.legal main a { max-width: 100%; word-break: break-all; }
+
+@media (max-width: 300px) {
+  .type-buttons { grid-template-columns: 1fr; }
+  .demo-controls label { align-items: flex-start; flex-direction: column; }
+  .demo-controls input { max-width: 100%; }
+}

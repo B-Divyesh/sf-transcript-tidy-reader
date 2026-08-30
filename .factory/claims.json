@@ -1,10 +1,17 @@
 [
   {
     "id": "download-package",
-    "claim": "Downloads a valid Chrome extension package.",
-    "where": "Landing-page download actions and README",
+    "claim": "Downloads a valid Chrome extension ZIP with complete consumer installation instructions.",
+    "where": "Landing-page install section, packaged INSTALL.txt, and README",
     "test": "npm test -- --grep @claim:download-package",
-    "sandbox": "Fresh browser context; request the built download and verify HTTP 200, ZIP MIME, and ZIP signature."
+    "sandbox": "Fresh browser context; verify the guide, ZIP response, signature, manifest, and packaged INSTALL.txt."
+  },
+  {
+    "id": "demo-sandbox",
+    "claim": "A visitor can try a searchable sample reader in one click without an account or saved demo data.",
+    "where": "Landing first screen, /demo/, README, and .factory/demo.md",
+    "test": "npm test -- --grep @claim:demo-sandbox",
+    "sandbox": "Fresh browser context at /demo/; exercise search and reset, then assert the demo has not written browser storage."
   },
   {
     "id": "reader-workflow",
@@ -15,17 +22,17 @@
   },
   {
     "id": "source-scope",
-    "claim": "Captures caption tracks that the visitor can access on YouTube and TED.",
-    "where": "Landing page, privacy policy, extension description, and README",
+    "claim": "Captures captions available to the visitor on YouTube and TED without downloading video, creating missing captions, or summarising them.",
+    "where": "Landing page, privacy policy, terms, extension description, and README",
     "test": "npm test -- --grep @claim:source-scope",
-    "sandbox": "Temporary extension profile with routed YouTube json3 and TED WebVTT fixtures; no live source account."
+    "sandbox": "Temporary extension profile with routed YouTube json3 and a representative current TED visible-transcript DOM fixture."
   },
   {
     "id": "local-private",
-    "claim": "Transcript capture, reading, and search do not send transcript text to Transcript Tidy.",
+    "claim": "Transcript capture, reading, search, and storage do not send transcript text to Transcript Tidy.",
     "where": "Landing privacy section, privacy policy, and README",
     "test": "npm test -- --grep @claim:local-private",
-    "sandbox": "Temporary extension profile; record the full workflow request log and allow only the routed source page and its caption track."
+    "sandbox": "Temporary extension profile; record the full workflow request log and allow only the routed source page and caption track."
   },
   {
     "id": "local-export",
@@ -35,16 +42,30 @@
     "sandbox": "Temporary extension profile with recorded caption fixture; download and inspect both export files."
   },
   {
+    "id": "reader-controls",
+    "claim": "Search, type, spacing, timestamp, print, and export controls are available without Plus.",
+    "where": "Landing page, terms, popup, and README",
+    "test": "npm test -- --grep @claim:reader-controls",
+    "sandbox": "Temporary extension profile with a captured fixture; operate every reader control and intercept print."
+  },
+  {
+    "id": "runtime-privacy",
+    "claim": "The site has no analytics, remote fonts, or third-party runtime scripts, and the extension does not read captions in the background.",
+    "where": "Privacy policy and README",
+    "test": "npm test -- --grep @claim:runtime-privacy",
+    "sandbox": "Fresh site and extension contexts; inspect loaded resources and assert caption requests begin only after explicit capture."
+  },
+  {
     "id": "plus-shelf",
-    "claim": "A one-time $12 Plus purchase keeps up to 50 recent reads on the device.",
-    "where": "Landing pricing section, terms, and README",
+    "claim": "New Plus sales are paused; an existing valid license keeps up to 50 recent reads on the device.",
+    "where": "Landing license section, options, terms, and README",
     "test": "npm test -- --grep @claim:plus-shelf",
-    "sandbox": "Fresh site context plus 50 deterministic transcript objects; assert price, checkout route, insertion, eviction, and cap."
+    "sandbox": "Fresh site context with a recorded valid verification response plus 50 deterministic transcript objects."
   },
   {
     "id": "license-restore",
-    "claim": "A returned Plus license is stored locally and removed from the address bar.",
-    "where": "Landing pricing form and purchase return flow",
+    "claim": "A returned valid Plus license is stored locally and removed from the address bar; an invalid license stays inactive.",
+    "where": "Landing license form and existing purchase return flow",
     "test": "npm test -- --grep @claim:license-restore",
     "sandbox": "Fresh browser context with a recorded valid Sociobot verification response; no live billing request."
   }

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Try Transcript Tidy with a private sample transcript. Search it, change the reading view, and reset it in one click." />
+    <meta name="theme-color" content="#315e4a" />
+    <link rel="canonical" href="https://transcript-tidy-reader.sociobot.in/demo/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://transcript-tidy-reader.sociobot.in/demo/" />
+    <meta property="og:title" content="Demo — Transcript Tidy" />
+    <meta property="og:description" content="Try the searchable reading view with sample data." />
+    <meta property="og:image" content="https://transcript-tidy-reader.sociobot.in/assets/transcript-tidy-social.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Demo — Transcript Tidy" />
+    <meta name="twitter:description" content="Try the searchable reading view with sample data." />
+    <meta name="twitter:image" content="https://transcript-tidy-reader.sociobot.in/assets/transcript-tidy-social.jpg" />
+    <title>Demo — Transcript Tidy</title>
+  </head>
+  <body class="demo-body">
+    <a class="skip" href="#main">Skip to sample transcript</a>
+    <aside class="demo-banner" aria-label="Demo mode">
+      <p><strong>Demo</strong> — sample data, nothing is saved</p>
+      <div><button id="reset-demo" type="button">Reset demo</button><a href="/#install">Start for real</a></div>
+    </aside>
+    <header class="site-header demo-header">
+      <a class="brand" href="/" aria-label="Transcript Tidy home"><span class="mark" aria-hidden="true"></span><span class="brand-name">Transcript Tidy</span></a>
+      <nav aria-label="Primary navigation"><a href="/">Home</a><a class="nav-cta" href="/#install">Install</a></nav>
+    </header>
+    <main id="main" class="demo-main">
+      <header class="sample-head">
+        <p class="eyebrow">Sample TED-style transcript</p>
+        <h1 tabindex="-1">The quiet power of a useful pause</h1>
+        <p>Three original sample passages show how Transcript Tidy turns short caption fragments into a stable reading page.</p>
+        <div class="sample-actions">
+          <button id="print-demo" type="button">Print sample</button>
+          <button id="export-demo" type="button">Export sample text</button>
+        </div>
+      </header>
+
+      <section class="demo-controls" aria-labelledby="controls-title">
+        <h2 id="controls-title">Change the reading view</h2>
+        <fieldset><legend>Typeface</legend><div class="type-buttons"><button type="button" data-demo-font="serif" aria-pressed="true">Serif</button><button type="button" data-demo-font="sans" aria-pressed="false">Sans</button><button type="button" data-demo-font="mono" aria-pressed="false">Mono</button></div></fieldset>
+        <label for="demo-spacing">Line spacing <output id="spacing-output">Relaxed</output></label>
+        <input id="demo-spacing" type="range" min="145" max="205" value="172" />
+      </section>
+
+      <section class="demo-search" aria-labelledby="search-title">
+        <h2 id="search-title">Find in the sample</h2>
+        <div><label for="demo-query">Search transcript</label><input id="demo-query" type="search" autocomplete="off" placeholder="Try “pause”" /><span id="demo-match-count" aria-live="polite">0 matches</span></div>
+      </section>
+
+      <article id="sample-transcript" class="sample-transcript" aria-label="Sample transcript">
+        <section><button class="sample-time" type="button" data-time="0:14" aria-label="Select sample timestamp 0:14">0:14</button><p>In a difficult conversation, silence can feel like an empty space we need to fill. A useful pause does something different. It gives each person enough room to hear what was actually said.</p></section>
+        <section><button class="sample-time" type="button" data-time="1:08" aria-label="Select sample timestamp 1:08">1:08</button><p>The pause is not an escape from the discussion. It is a small piece of structure. You can breathe, check your first reaction, and choose the next sentence with care.</p></section>
+        <section><button class="sample-time" type="button" data-time="2:31" aria-label="Select sample timestamp 2:31">2:31</button><p>Try counting one quiet breath before you reply today. The goal is not perfect calm. The goal is to make the next useful thought easier to find.</p></section>
+      </article>
+      <p id="demo-status" class="demo-status" role="status" aria-live="polite"></p>
+    </main>
+    <footer class="site-footer"><a class="brand" href="/"><span class="mark" aria-hidden="true"></span><span>Transcript Tidy</span></a><p>A caption reader for people who prefer text. Built by Param Factory. Version 1.0.1.</p><nav aria-label="Legal"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></nav></footer>
+    <script type="module" src="/demo.ts"></script>
+  </body>
+</html>

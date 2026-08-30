@@ -1,16 +1,13 @@
-import { CHECKOUT_URL, getLicenseState, saveAndVerifyLicense } from '../../src/license';
+import { getLicenseState, saveAndVerifyLicense } from '../../src/license';
 import { addToShelf } from '../../src/shelf';
 import type { CaptureResult, Transcript } from '../../src/types';
 import './style.css';
 
 const button = document.querySelector<HTMLButtonElement>('#tidy')!;
 const status = document.querySelector<HTMLElement>('#status')!;
-const buy = document.querySelector<HTMLAnchorElement>('#buy')!;
 const restore = document.querySelector<HTMLFormElement>('#restore')!;
 const licenseInput = document.querySelector<HTMLInputElement>('#license')!;
 const licenseStatus = document.querySelector<HTMLElement>('#license-status')!;
-
-buy.href = CHECKOUT_URL;
 
 void getLicenseState().then((state) => {
   if (state.unlocked) licenseStatus.textContent = 'Plus is active on this device.';

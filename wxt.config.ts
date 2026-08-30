@@ -4,7 +4,7 @@ export default defineConfig({
   manifest: {
     name: 'Transcript Tidy',
     description: 'Turn captions you can already access into a calm, searchable reading view.',
-    version: '1.0.0',
+    version: '1.0.1',
     permissions: ['activeTab', 'storage', 'tabs'],
     host_permissions: [
       'https://www.youtube.com/*',

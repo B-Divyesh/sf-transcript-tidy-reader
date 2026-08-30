@@ -1,5 +1,6 @@
 import type { Transcript } from '../../src/types';
 import './style.css';
+import './contrast.css';
 
 void browser.storage.local.get('transcriptShelf').then(({ transcriptShelf }) => {
   if (!Array.isArray(transcriptShelf) || !transcriptShelf.length) return;

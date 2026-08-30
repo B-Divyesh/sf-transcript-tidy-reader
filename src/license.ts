@@ -2,7 +2,6 @@ const SLUG = 'transcript-tidy-reader';
 export const LICENSE_KEY = `sb_license:${SLUG}`;
 const VERDICT_KEY = `${LICENSE_KEY}:verdict`;
 const DAY = 86_400_000;
-export const CHECKOUT_URL = `https://api.sociobot.in/api/v1/products/${SLUG}/checkout`;
 
 interface Verdict {
   valid: boolean;

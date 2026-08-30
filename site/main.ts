@@ -9,6 +9,8 @@ const input = document.querySelector<HTMLInputElement>('#license');
 const query = new URLSearchParams(location.search);
 const returnedLicense = query.get('license');
 
+if (query.get('demo') === '1') location.replace('/demo/');
+
 if (returnedLicense) {
   localStorage.setItem(LICENSE_KEY, returnedLicense);
   history.replaceState({}, '', `${location.pathname}${location.hash}`);
@@ -39,7 +41,7 @@ async function verify(token: string) {
       setStatus('License verified. Paste the same license into the extension to unlock your local shelf.', 'success');
       if (input) input.value = '';
     } else {
-      setStatus('This license is no longer active. Check the token or buy a new license.', 'error');
+      setStatus('This license is no longer active. Check the token from your receipt.', 'error');
     }
   } catch {
     setStatus('Verification is unavailable while offline. Your free reader still works.', 'notice');

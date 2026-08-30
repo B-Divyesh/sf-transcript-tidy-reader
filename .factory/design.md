@@ -47,6 +47,8 @@ Document transitions use 180–240 ms opacity and small vertical transforms; the
 
 - `assets/src/reading-garden.png`: source illustration generated with the Azure AI Foundry `factory-image` deployment on 2026-08-27.
 - `site/public/assets/reading-garden-960.webp`, `reading-garden-1440.webp`, `reading-garden-1440.avif`, and the JPEG fallback: optimized landing-page derivatives, all below 300 KB.
+- `site/public/assets/transcript-tidy-social.jpg`: 1200×630 centre crop of the original reading-garden artwork for local Open Graph and Twitter cards.
+- `site/public/apple-touch-icon.png`: locally resized 180 px derivative of the hand-authored extension mark.
 - Product mark and extension icons: original hand-authored SVG/CSS geometry derived from a folded page and bookmark; no stock icon set.
 
 ### Prompt sheet
@@ -54,3 +56,12 @@ Document transitions use 180–240 ms opacity and small vertical transforms; the
 Use case: `stylized-concept`. Asset type: wide landing-page editorial hero. Primary request: a surreal quiet reading garden made of layered cream paper pages, fragmented caption strips gently converging into one continuous path, with a slim coral bookmark ribbon guiding through it. World: miniature architectural paper landscape, bookish and contemplative. Materials: tactile uncoated paper, subtle deckled edges, tiny moss-green punctuation stones. Light: soft raking dawn studio light, long gentle shadows. Lens/composition: wide 3:2 editorial still life, path entering lower left and opening toward upper right, useful negative space, no people. Palette: warm parchment, near-black ink, deep moss, restrained coral, muted ochre. Avoid: text, letters, readable glyphs, logos, watermarks, screens, laptops, microphones, play buttons, neon gradients, glossy 3D plastic, photoreal people, brands, copyrighted characters.
 
 The generated image is original to Transcript Tidy and used under the product's MIT-distributed asset terms. The footer discloses AI-assisted image generation.
+
+## Repair additions
+
+The visitor demo uses the same paper-sheet hierarchy as the extension reader,
+with moss timestamp marginalia and ochre search marks. Its persistent moss
+banner makes the sample boundary clear without resembling a warning. The 404
+uses one loose, hand-drawn CSS page and coral bookmark from the same visual
+grammar. Both additions use only existing artwork or hand-authored CSS; no new
+generated source asset was introduced in the 1.0.1 repair.

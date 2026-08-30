@@ -96,10 +96,24 @@ function findTedVttUrl(): string | undefined {
 }
 
 function captureVisibleTedTranscript(): Cue[] {
-  const candidates = document.querySelectorAll<HTMLElement>('[data-testid*="transcript"] li, [class*="transcript"] li, [class*="Transcript"] li');
-  return [...candidates].flatMap((item, index) => {
-    const time = item.querySelector<HTMLElement>('time, button, [class*="time"]')?.innerText.trim() ?? '';
-    const text = item.innerText.replace(time, '').trim();
+  // TED's current reader renders one passage per `div.mb-6.w-full`. Its time
+  // is a native button and its spoken segments are divs with button roles.
+  // Keep the semantic selectors for earlier layouts, then use that exact
+  // public DOM shape as a source-specific fallback.
+  const candidates = document.querySelectorAll<HTMLElement>([
+    '[data-testid*="transcript"] li',
+    '[class*="transcript"] li',
+    '[class*="Transcript"] li',
+    'div.mb-6.w-full'
+  ].join(', '));
+  return [...new Set(candidates)].flatMap((item, index) => {
+    const timeNode = [...item.querySelectorAll<HTMLElement>('time, button, [class*="time"]')]
+      .find((node) => /^(?:\d{1,2}:)?\d{1,2}:\d{2}(?:\.\d{1,3})?$/.test(node.innerText.trim()));
+    const time = timeNode?.innerText.trim() ?? '';
+    const segments = [...item.querySelectorAll<HTMLElement>('div[role="button"]')]
+      .map((segment) => segment.innerText.trim())
+      .filter(Boolean);
+    const text = (segments.length ? segments.join(' ') : item.innerText.replace(time, '')).replace(/\s+/g, ' ').trim();
     const startMs = parseTimestamp(time);
     return text ? [{ startMs: Number.isFinite(startMs) ? startMs : index * 5_000, durationMs: 0, text }] : [];
   });

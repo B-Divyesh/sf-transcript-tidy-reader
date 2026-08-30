@@ -1,0 +1,5 @@
+:root { --coral: #a23d31; }
+
+@media (prefers-color-scheme: dark) {
+  :root { --coral: #ff8c77; }
+}

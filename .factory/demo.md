@@ -1,18 +1,25 @@
-# Verification sandbox
+# Visitor demo sandbox
 
-The automated demo uses a temporary Chromium extension profile and a recorded
-YouTube `json3` caption response. It opens a realistic talk named “A patient
-idea”, captures three caption fragments, and renders them in the packaged
-reader. Search, timestamp links, local exports, and accessibility checks all
-run against this sample.
+Open <https://transcript-tidy-reader.sociobot.in/demo/>. The first-screen
+“Try it with sample data” action opens the same route in one click. The legacy
+`/?demo=1` entry also redirects there.
 
-Run the sandbox with:
+The demo contains three original passages from a fictional talk, “The quiet
+power of a useful pause.” A visitor can search them, change type and line
+spacing, select timestamps, print, and export sample text.
+
+The banner stays visible and says “Demo — sample data, nothing is saved.”
+**Reset demo** restores the original view. **Start for real** opens the public
+installation guide.
+
+Demo state exists only in page memory. It does not use localStorage,
+sessionStorage, IndexedDB, extension storage, a user profile, or a backend.
+Reloading or leaving `/demo/` discards every change. The automated sandbox
+opens a fresh browser context, exercises search and reset, and checks every
+browser storage area.
+
+Run it with:
 
 ```sh
-npm test -- --grep @claim:reader-workflow
+npm test -- --grep @claim:demo-sandbox
 ```
-
-Each run starts with an empty temporary profile. Playwright removes that
-profile after the test, so no browser data is read from or written to a real
-user profile. Network routes are fulfilled by the test fixture and no live
-video, account, license, or transcript is used.

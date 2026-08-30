@@ -1,59 +1,85 @@
 # Transcript Tidy
 
-Transcript Tidy is a local-first Chrome extension for people who would rather read than watch or listen. On a captioned YouTube or TED page, it turns the caption track the visitor can already access into a stable document with readable paragraphs, search, timestamp links, type controls, printing, and TXT/HTML export.
+Transcript Tidy is a Chrome extension for people who prefer reading. It turns
+accessible YouTube and TED captions into readable paragraphs with search and
+timestamp links. Processing stays in the browser.
 
-The free reader contains the complete core workflow. A one-time $12 Plus license adds an on-device shelf for up to 50 recent transcripts; no accessibility control or export is paywalled.
+Try the isolated sample reader at
+<https://transcript-tidy-reader.sociobot.in/demo/>. It needs no account and
+does not save demo data.
 
-Live product page: <https://transcript-tidy-reader.sociobot.in>
+## Install the extension
 
-## Privacy and scope
+The public release is an unpacked Chrome extension, not a Web Store listing.
 
-Caption parsing, paragraph reflow, search, storage, and exports happen in the browser. Transcript text is not uploaded, analyzed, or published. The extension does not download video, generate missing transcripts, bypass access controls, summarize content, or create a hosted transcript library. It currently supports YouTube and TED pages that expose captions to the visitor.
+1. Download `transcript-tidy-chrome.zip` from the product page.
+2. Extract the ZIP to a folder you can keep.
+3. Open `chrome://extensions` and turn on Developer mode.
+4. Select **Load unpacked** and choose the folder containing `manifest.json`.
 
-The only remote request made by the product itself is optional license verification through the Sociobot billing API. See [`site/privacy/index.html`](site/privacy/index.html) and [`site/terms/index.html`](site/terms/index.html).
+The ZIP includes `INSTALL.txt` with the same steps.
 
-## Develop
+## Reader and source scope
+
+On a captioned YouTube or TED page, select the extension and choose **Tidy
+this transcript**. It makes paragraphs, search, timestamp links, type and
+spacing controls, printing, and TXT/HTML exports available without Plus.
+
+Transcript Tidy reads only captions the open page makes available. It does
+not download video, create missing captions, bypass access controls, summarise
+content, or publish a transcript library.
+
+## Privacy
+
+Capture, paragraph reflow, search, storage, and export stay in the browser.
+Transcript text is not sent to Transcript Tidy. Caption requests start only
+after the visitor selects the extension.
+
+The site has no analytics, remote fonts, or third-party runtime scripts. An
+existing Plus license may be verified through the Sociobot billing API. New
+Plus sales are paused while checkout is unavailable. Existing valid licenses
+still keep up to 50 recent reads on the device.
+
+See [`site/privacy/index.html`](site/privacy/index.html) and
+[`site/terms/index.html`](site/terms/index.html).
+
+## Develop and verify
 
 Requirements: Node.js 20+ and npm.
 
 ```sh
-npm install
+npm ci
 npm run dev          # WXT extension development
-npm run dev:site     # landing page at http://localhost:5173
-npm run typecheck
+npm run dev:site     # static site at http://localhost:5173
 npm test
+npm run typecheck
+npm run lint
 npm run build
 ```
 
-`npm test` runs parser unit tests plus Playwright checks at desktop and 390 px, an axe accessibility scan, the license-return flow, and an installed-extension smoke test that captures a mocked caption track and exercises the reader.
+`npm test` runs parser tests plus Playwright at desktop and 390 px. It covers
+the sample sandbox, 200% reflow, accessibility, local exports, source errors,
+license restoration, and an installed-extension workflow.
 
 ## Build outputs
 
-`npm run build` is the reproducible production command. `npm run build:site`
-also rebuilds and packages the extension so a static-only deploy cannot omit
-the download. Both create:
+`npm run build` creates:
 
 - `.output/chrome-mv3/` — unpacked Manifest V3 extension
-- `.output/transcript-tidy-reader-1.0.0-chrome.zip` — WXT package
-- `dist/site/index.html` — deployable static landing root
-- `dist/site/downloads/transcript-tidy-chrome.zip` — landing-page download
+- `.output/transcript-tidy-reader-1.0.1-chrome.zip` — WXT package
+- `dist/site/` — complete static deployment, including the download ZIP
 
-To try the unpacked extension locally, open `chrome://extensions`, enable Developer mode, choose **Load unpacked**, and select `.output/chrome-mv3`.
+## Architecture and deployment
 
-## Architecture
+- WXT + TypeScript, Manifest V3 extension
+- Vite + plain TypeScript and CSS static site
+- Browser extension storage; no server database
+- YouTube `json3`, WebVTT, and current visible-transcript adapters
 
-- WXT + TypeScript, Manifest V3
-- Plain TypeScript and CSS for the static marketing/legal site
-- No framework, CDN, remote font, analytics SDK, or server database
-- YouTube `json3` and WebVTT parsing with a visible-transcript fallback
-- Browser extension storage for the active transcript and optional Plus shelf
+Deploy `dist/site/` as the static root for
+`sf-transcript-tidy-reader`. The factory owns DNS, hosting, billing
+registration, and release channels.
 
-The generated reading-garden illustration and its exact prompt/provenance are documented in [`.factory/design.md`](.factory/design.md). The code and original project assets are MIT licensed.
-
-## Deployment
-
-Deploy `dist/site/` as the static root. The factory owns DNS, hosting, billing registration, and release-channel changes. The production billing links use the product slug rather than a hard-coded billing product ID.
-
-## Known source limitations
-
-Source sites can change their caption markup and formats. Videos with no caption track accessible to the current visitor are intentionally unsupported. Auto-generated captions work when YouTube exposes their track, but Transcript Tidy does not make accuracy claims about source captions.
+The original reading-garden art and its provenance are documented in
+[`.factory/design.md`](.factory/design.md). Code and original assets use the
+MIT license.

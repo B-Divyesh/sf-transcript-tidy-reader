@@ -1,0 +1,16 @@
+Transcript Tidy 1.0.1 — Chrome installation
+
+1. Extract this ZIP into a folder you can keep.
+2. Enter chrome://extensions in Chrome's address bar.
+3. Turn on Developer mode.
+4. Select "Load unpacked".
+5. Choose the extracted folder that contains manifest.json.
+
+Open a captioned YouTube or TED talk. Select Transcript Tidy in Chrome's
+extension menu, then choose "Tidy this transcript."
+
+Product guide and sample reader:
+https://transcript-tidy-reader.sociobot.in/
+
+Privacy:
+https://transcript-tidy-reader.sociobot.in/privacy/

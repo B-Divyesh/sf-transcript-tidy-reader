@@ -1,3 +1,3 @@
 import './style.css';
-import './legal.css';
+import './not-found.css';
 import './route-fixes.css';

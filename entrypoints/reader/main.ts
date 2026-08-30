@@ -92,10 +92,10 @@ settingsToggle.addEventListener('click', () => {
   if (open) settings.querySelector<HTMLElement>('button')?.focus();
 });
 
-document.querySelectorAll<HTMLButtonElement>('[data-font]').forEach((button) => {
+document.querySelectorAll<HTMLButtonElement>('button[data-font]').forEach((button) => {
   button.addEventListener('click', () => {
     document.documentElement.dataset.font = button.dataset.font;
-    document.querySelectorAll<HTMLButtonElement>('[data-font]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    document.querySelectorAll<HTMLButtonElement>('button[data-font]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
   });
 });
 

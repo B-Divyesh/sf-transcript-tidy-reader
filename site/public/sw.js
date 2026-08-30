@@ -1,5 +1,5 @@
 const CACHE = 'transcript-tidy-site-__BUILD_ID__';
-const SHELL = ['/', '/privacy/', '/terms/', '/assets/reading-garden-960.webp'];
+const SHELL = ['/', '/demo/', '/privacy/', '/terms/', '/404.html', '/assets/reading-garden-960.webp'];
 self.addEventListener('install', (event) => event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting())));
 self.addEventListener('activate', (event) => event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)))).then(() => self.clients.claim())));
 self.addEventListener('fetch', (event) => {
