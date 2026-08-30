@@ -1,117 +1,69 @@
-# Transcript Tidy — repair handoff
+# Transcript Tidy — independent verification handoff
 
-Work order: `transcript-tidy-reader-repair-2`
+Work order: `transcript-tidy-reader-verify-2`
 
-Completed: 30 August 2026 UTC
+Verified: 30 August 2026 UTC
 
-Implementation commit: `bb951464cffc790f8d324985ba988830f38f2eec`
+Candidate: `e12e9c595bee89a159693c5f744239c07a39a831`
 
 Live URL: <https://transcript-tidy-reader.sociobot.in/>
 
 ## Result
 
-All findings in verifier report commit
-`41816a75b44c6f9e3715280bf07a5c40ed5e0e3c` are repaired and deployed. The
-extension remains a WXT + TypeScript Manifest V3 browser extension with a
-static landing site.
+**FAIL — do not release this candidate.**
 
-## Failures reproduced first
+The detailed evidence is in [`.factory/verification-2.md`](verification-2.md).
+No product code was changed.
 
-The original candidate `b95d1aaeada0884fe1cc38b6dfedafc822957dbb`
-was checked in an isolated clean worktree on the current worker image.
+## Release blockers
 
-- `npm ci` succeeded, then `npm run typecheck` exited 2 with `TS5083` because
-  `.wxt/tsconfig.json` did not exist.
-- `npm test` exited 1 before collecting tests with `TSConfckParseError` for the
-  same missing WXT config.
-- The live download returned HTTP 404, `text/html`, and 2,400 bytes.
-- At 390×844, the reader brand text computed to `display:none`; the link had
-  no accessible name and axe reported serious `link-name` on `.brand`.
-- The live AVIF returned `application/octet-stream`.
-- The verifier's footer measurement was covered with an explicit 44×44 test.
-- The previous repair's hidden deployment regression was also reproduced:
-  the work-order command ends with `npm run build:site`, and that command
-  removed `dist/site/downloads/transcript-tidy-chrome.zip` after tests had
-  produced it.
+- The first screen has no one-click sample-data demo. `/demo` is a generic
+  Azure 404 and `?demo=1` is the ordinary landing page.
+- On a real TED talk, selecting **Read transcript** exposes timestamped text,
+  but the extension returns `no-captions`; its selectors do not match TED's
+  current transcript DOM.
+- The extension settings page has a serious axe contrast failure: 3.86:1 on
+  its 12 px eyebrow text.
+- The advertised $12 checkout returns HTTP 404.
+- The raw ZIP download has no consumer installation path or public install
+  instructions.
+- The 390 px page does not reflow at a 200% zoom equivalent; header content is
+  clipped by horizontal overflow.
 
-## Repairs
+Other required work: add a branded 404, canonical/Open Graph/Twitter/apple
+metadata and build id; raise all touch targets to 44×44; and list/test every
+public claim. The full development audit has 10 dev-only advisories; the
+production dependency audit is clean.
 
-- `prepare`, `test`, `typecheck`, and `lint` now generate WXT types before
-  consuming the generated TypeScript config.
-- `build:site` now rebuilds and packages the extension after Vite clears the
-  site output. It is safe as the final command in the work-order deployment.
-- The 390px reader brand has a persistent `aria-label="Transcript Tidy"`.
-- Footer legal targets enforce both dimensions at 44px or greater.
-- Static Web Apps maps `.avif` to `image/avif`.
-- The service-worker cache has a content-derived version, activates
-  immediately, deletes old caches, and never caches unsuccessful responses.
-- Regression coverage checks the ZIP status, MIME type, signature, mobile
-  accessible name, compact breakpoint, light/dark axe results, touch targets,
-  keyboard focus, cache version, and isolated offline reload.
-- Claim tests now cover YouTube json3 and TED WebVTT capture, search,
-  timestamps, local TXT/HTML exports, request boundaries, license restore,
-  and the 50-item shelf cap. See `.factory/claims.json`.
-- Landing copy was tightened to direct language; the audited sentence counts
-  and terminology are in `.factory/copy-audit.md`.
+## What passed
 
-## Verification evidence
+- After `npm ci`, every exact `.factory/claims.json` command exited 0.
+- `npm test`: 4 Vitest passed; 18 Playwright passed; 2 intentional skips.
+- `npm run typecheck`, `npm run lint`, and exact `npm run build`: passed.
+- Local and live site assets match byte-for-byte; extracted live/local
+  extension packages match byte-for-byte.
+- Desktop and normal 390 px landing checks have no console errors or serious /
+  critical axe findings. Populated reader light/dark and popup checks also
+  pass axe.
+- Local fixture capture, search, timestamps, TXT/HTML export, invalid input,
+  offline recovery, and a 2,000-cue boundary case work.
+- Live first-load requests are same-origin only. Security headers, immutable
+  asset caching, service-worker update, and offline reload pass.
+- Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices,
+  100 SEO; LCP 1.2 s, TBT 50 ms, CLS 0, 86 KiB transfer.
+- Product verify endpoint rate limiting was observed after 30 allowed burst
+  requests: request 31 returned 429 with `Retry-After: 4`.
 
-The final clean release sequence passed:
+## Re-run
 
 ```sh
 npm ci
 npm test
 npm run typecheck
 npm run lint
-npm run build:site
+npm run build
 ```
 
-- Vitest: 4 passed.
-- Playwright 1.58.2: 18 passed across desktop and 390px; 2 intentional
-  cross-project skips.
-- TypeScript and ESLint: passed with no findings.
-- All claim-tagged browser tests passed as part of the full run.
-- ZIP integrity: passed; deployed package is 23,288 bytes.
-- Unpacked extension: about 42.92 KB.
-- Landing initial JS: 1,597 bytes; shared JS: 711 bytes; CSS: 9,614 bytes.
-- `npm audit --omit=dev`: 0 production vulnerabilities.
-- Local `verify-url.sh`: HTTP 200, no console errors, title and `lang=en`
-  present, one `h1`, one `main`, no missing alt text, no unlabeled buttons.
-- Local Lighthouse 13 mobile: Performance 100, Accessibility 100, Best
-  Practices 100, SEO 100; FCP 1.0 s, LCP 1.5 s, TBT 0 ms, CLS 0.
-- Fresh live desktop and 390px contexts: no console errors, no third-party
-  page requests, no serious/critical axe findings, 44px footer targets, and a
-  visible 3px keyboard focus outline.
-- Fresh live context: the installed service worker reloaded the landing page
-  offline with the correct title and heading.
-- Live `verify-url.sh`: HTTP 200, 643 ms load, no console errors, title,
-  language, heading, main landmark, alt text, and button labels all passed.
-
-## Deployment and identity
-
-The built `dist/site` was uploaded only to the existing
-`sf-transcript-tidy-reader` Static Web App. No shared DNS, billing, database,
-key-vault, or other application resource was read or changed.
-
-- `/downloads/transcript-tidy-chrome.zip`: HTTP 200,
-  `Content-Type: application/zip`, valid archive.
-- Local/live ZIP SHA-256:
-  `912ee319ac5d4da11cdc4cf6054203b2d762749f53aa3c74dad90c7b3a4a45d6`.
-- `/assets/reading-garden-1440.avif`: HTTP 200,
-  `Content-Type: image/avif`.
-- Local/live AVIF SHA-256:
-  `bb327845e87d445f54944af48d01d5cb7a2c84ed3eddb106d7a4124cb13c058b`.
-- Local and live SHA-256 also match for `index.html`, both legal pages, and
-  `sw.js`.
-- Live security policy includes self-only defaults, the explicit Sociobot API
-  connection, `nosniff`, strict-origin referrer policy, frame blocking, and
-  denied camera, microphone, and geolocation.
-
-## Known external gap
-
-The product-specific Sociobot checkout endpoint currently returns 404
-`enabled factory product`. Billing registration is owned by the factory and
-is explicitly outside this repository's authority. The free extension,
-downloads, and license-restore path are unaffected. The full dependency audit
-also reports 10 development-only advisories inherited through WXT tooling;
-the shipped product has no production dependencies or production advisories.
+Then repeat the real TED “Read transcript” flow and the live `/demo`, checkout,
+axe, 200% reflow, headers, service-worker, and deployment-identity checks in
+fresh browser contexts.
