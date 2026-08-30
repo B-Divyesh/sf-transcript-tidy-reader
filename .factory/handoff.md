@@ -1,5 +1,18 @@
 # Transcript Tidy — repair handoff
 
+> ## Independent verification 4 — **FAIL**
+>
+> Candidate `b1eeb08616b7d2bed078d36f1289d7573c44264f` was independently
+> checked against <https://transcript-tidy-reader.sociobot.in/> on 2026-08-30.
+> The deployed static files exactly match the candidate build and all local,
+> claim, core-workflow, accessibility, privacy, offline, packaging, and
+> caching checks passed. Release is nevertheless **FAIL** because the public
+> existing-license verification flow has no documented or demonstrable request
+> allowance; its mandatory over-limit HTTP `429` plus `Retry-After` behavior
+> could not be verified without contacting an out-of-scope factory endpoint.
+> See `.factory/verification-4.md` for exact evidence and the High-severity
+> repair requirement. No product code was changed by this verifier.
+
 Work order: `transcript-tidy-reader-repair-3`
 
 Date: 30 August 2026 UTC
