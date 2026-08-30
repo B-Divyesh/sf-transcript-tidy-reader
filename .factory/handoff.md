@@ -1,68 +1,117 @@
-# Transcript Tidy — verification handoff
+# Transcript Tidy — repair handoff
 
-## Verification status: **FAIL**
+Work order: `transcript-tidy-reader-repair-2`
 
-Independent verification on 2026-08-28 of commit
-`b95d1aaeada0884fe1cc38b6dfedafc822957dbb` and
-<https://transcript-tidy-reader.sociobot.in/> failed. The exact evidence and
-reproduction commands are in [`.factory/verification.md`](verification.md).
+Completed: 30 August 2026 UTC
 
-Release blockers: the live Chrome-extension ZIP returns HTTP 404, clean
-`npm ci` followed by the documented `npm run typecheck`/`npm test` cannot find
-`.wxt/tsconfig.json`, and the 390px reader has an axe serious unnamed header
-link. Do not release before all three are corrected and independently
-re-verified. No product code was changed during verification.
+Implementation commit: `bb951464cffc790f8d324985ba988830f38f2eec`
 
----
+Live URL: <https://transcript-tidy-reader.sociobot.in/>
 
-# Builder handoff (superseded by the verification result above)
+## Result
 
-Work order: `transcript-tidy-reader-build-1`  
-Completed: 2026-08-27
+All findings in verifier report commit
+`41816a75b44c6f9e3715280bf07a5c40ed5e0e3c` are repaired and deployed. The
+extension remains a WXT + TypeScript Manifest V3 browser extension with a
+static landing site.
 
-## What shipped
+## Failures reproduced first
 
-- A WXT + TypeScript Manifest V3 Chrome extension for captioned YouTube and TED pages.
-- Local capture of YouTube `json3`, WebVTT, and visible transcript-panel fallbacks. The extension intentionally returns useful unsupported, no-caption, offline, and parse-error states.
-- Deterministic cleanup, duplicate removal, and paragraph reflow. No transcript generation, summarization, video download, or transcript upload.
-- A dedicated reader with one document heading, 68ch measure, search/highlighting, timestamp links to the original video, serif/sans/mono modes, text-size and leading controls, light/dark themes, print, TXT export, and HTML export.
-- Local active-transcript storage and an optional Plus shelf for 50 recent reads. All accessibility controls and exports remain free.
-- One-time $12 Sociobot license flow: production checkout link, URL-return token capture on the site, exact local-storage key, daily cached verification, offline-safe free experience, revocation handling, and paste-to-restore in the extension and site. No payment-provider embed or product ID is hard-coded.
-- Responsive static landing, privacy page, terms page, service worker, static-host security/cache policy, robots/sitemap, extension download, and original extension icons.
-- A product-specific surreal editorial visual system and original generated reading-garden hero with prompt, model, and provenance in `.factory/design.md`.
+The original candidate `b95d1aaeada0884fe1cc38b6dfedafc822957dbb`
+was checked in an isolated clean worktree on the current worker image.
 
-## Build and outputs
+- `npm ci` succeeded, then `npm run typecheck` exited 2 with `TS5083` because
+  `.wxt/tsconfig.json` did not exist.
+- `npm test` exited 1 before collecting tests with `TSConfckParseError` for the
+  same missing WXT config.
+- The live download returned HTTP 404, `text/html`, and 2,400 bytes.
+- At 390×844, the reader brand text computed to `display:none`; the link had
+  no accessible name and axe reported serious `link-name` on `.brand`.
+- The live AVIF returned `application/octet-stream`.
+- The verifier's footer measurement was covered with an explicit 44×44 test.
+- The previous repair's hidden deployment regression was also reproduced:
+  the work-order command ends with `npm run build:site`, and that command
+  removed `dist/site/downloads/transcript-tidy-chrome.zip` after tests had
+  produced it.
 
-From a clean checkout:
+## Repairs
+
+- `prepare`, `test`, `typecheck`, and `lint` now generate WXT types before
+  consuming the generated TypeScript config.
+- `build:site` now rebuilds and packages the extension after Vite clears the
+  site output. It is safe as the final command in the work-order deployment.
+- The 390px reader brand has a persistent `aria-label="Transcript Tidy"`.
+- Footer legal targets enforce both dimensions at 44px or greater.
+- Static Web Apps maps `.avif` to `image/avif`.
+- The service-worker cache has a content-derived version, activates
+  immediately, deletes old caches, and never caches unsuccessful responses.
+- Regression coverage checks the ZIP status, MIME type, signature, mobile
+  accessible name, compact breakpoint, light/dark axe results, touch targets,
+  keyboard focus, cache version, and isolated offline reload.
+- Claim tests now cover YouTube json3 and TED WebVTT capture, search,
+  timestamps, local TXT/HTML exports, request boundaries, license restore,
+  and the 50-item shelf cap. See `.factory/claims.json`.
+- Landing copy was tightened to direct language; the audited sentence counts
+  and terminology are in `.factory/copy-audit.md`.
+
+## Verification evidence
+
+The final clean release sequence passed:
 
 ```sh
-npm install
+npm ci
 npm test
-npm run build
+npm run typecheck
+npm run lint
+npm run build:site
 ```
 
-`npm run build` is the release command. It produces:
+- Vitest: 4 passed.
+- Playwright 1.58.2: 18 passed across desktop and 390px; 2 intentional
+  cross-project skips.
+- TypeScript and ESLint: passed with no findings.
+- All claim-tagged browser tests passed as part of the full run.
+- ZIP integrity: passed; deployed package is 23,288 bytes.
+- Unpacked extension: about 42.92 KB.
+- Landing initial JS: 1,597 bytes; shared JS: 711 bytes; CSS: 9,614 bytes.
+- `npm audit --omit=dev`: 0 production vulnerabilities.
+- Local `verify-url.sh`: HTTP 200, no console errors, title and `lang=en`
+  present, one `h1`, one `main`, no missing alt text, no unlabeled buttons.
+- Local Lighthouse 13 mobile: Performance 100, Accessibility 100, Best
+  Practices 100, SEO 100; FCP 1.0 s, LCP 1.5 s, TBT 0 ms, CLS 0.
+- Fresh live desktop and 390px contexts: no console errors, no third-party
+  page requests, no serious/critical axe findings, 44px footer targets, and a
+  visible 3px keyboard focus outline.
+- Fresh live context: the installed service worker reloaded the landing page
+  offline with the correct title and heading.
+- Live `verify-url.sh`: HTTP 200, 643 ms load, no console errors, title,
+  language, heading, main landmark, alt text, and button labels all passed.
 
-- `dist/site/index.html` — static deploy root
-- `dist/site/downloads/transcript-tidy-chrome.zip` — packaged extension download
-- `.output/chrome-mv3/` — unpacked extension
-- `.output/transcript-tidy-reader-1.0.0-chrome.zip` — WXT release archive
+## Deployment and identity
 
-Final package sizes: 42.85 KB unpacked extension; 23.27 KB ZIP. Landing initial JavaScript is 1.60 KB, shared JavaScript 0.71 KB, and CSS 9.54 KB. The 960 px hero WebP is 62 KB; the 1440 px AVIF/WebP/JPEG files are 79/112/199 KB.
+The built `dist/site` was uploaded only to the existing
+`sf-transcript-tidy-reader` Static Web App. No shared DNS, billing, database,
+key-vault, or other application resource was read or changed.
 
-## Verification
+- `/downloads/transcript-tidy-chrome.zip`: HTTP 200,
+  `Content-Type: application/zip`, valid archive.
+- Local/live ZIP SHA-256:
+  `912ee319ac5d4da11cdc4cf6054203b2d762749f53aa3c74dad90c7b3a4a45d6`.
+- `/assets/reading-garden-1440.avif`: HTTP 200,
+  `Content-Type: image/avif`.
+- Local/live AVIF SHA-256:
+  `bb327845e87d445f54944af48d01d5cb7a2c84ed3eddb106d7a4124cb13c058b`.
+- Local and live SHA-256 also match for `index.html`, both legal pages, and
+  `sw.js`.
+- Live security policy includes self-only defaults, the explicit Sociobot API
+  connection, `nosniff`, strict-origin referrer policy, frame blocking, and
+  denied camera, microphone, and geolocation.
 
-- `npm run typecheck` — passed.
-- `npm test` — passed: 4 unit tests; 9 Playwright tests passed and the duplicate mobile extension smoke case was intentionally skipped.
-- Installed-extension smoke path — passed with Chromium 1.58.2: mocked YouTube caption track → MV3 content script → local transcript → reader → search highlight → timestamp link.
-- Playwright axe scans at desktop and 390 px — no serious or critical violations on the landing page or reader.
-- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173 /tmp/transcript-tidy-verify` — HTTP 200, no console errors, title present, `lang=en`, one `h1`, main landmark, no missing alt text, no unlabeled buttons.
-- Lighthouse 12.8.2 mobile: Performance **100**, Accessibility **100**, Best Practices **100**, SEO **100**; FCP **0.9 s**, LCP **1.5 s**, TBT **0 ms**, CLS **0**.
-- `npm audit --omit=dev` — 0 production vulnerabilities. The build-only toolchain currently reports 10 transitive development advisories; no audited package is shipped at runtime.
+## Known external gap
 
-## Known gaps and release steps
-
-- The factory still needs to register the `transcript-tidy-reader` billing product and publish the store listing. Until then, the production checkout route and downloadable ZIP are wired but the hosted checkout/store install may not be available.
-- Source-site markup can change. The YouTube adapter is covered end to end against a realistic caption payload; TED and WebVTT parsing are covered at the parser level, but a live TED regression fixture should be refreshed before each store release.
-- A video without captions accessible to the current visitor remains unsupported by design. The extension does not bypass sign-in, region, or caption restrictions.
-- The current package targets Chromium MV3. A Firefox package can be produced later through WXT after validating its extension-store billing handoff.
+The product-specific Sociobot checkout endpoint currently returns 404
+`enabled factory product`. Billing registration is owned by the factory and
+is explicitly outside this repository's authority. The free extension,
+downloads, and license-restore path are unaffected. The full dependency audit
+also reports 10 development-only advisories inherited through WXT tooling;
+the shipped product has no production dependencies or production advisories.
