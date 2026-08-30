@@ -13,8 +13,8 @@ Release: 1.0.1
 ## Result
 
 All release-blocking findings in `.factory/verification-2.md` are repaired.
-The extension and static site pass the complete local release gate. Live
-deployment evidence is recorded below after the production upload.
+The extension and static site pass the complete local and live release gates.
+Product commit `41810e1` was pushed to `origin/main` and deployed.
 
 ## Repairs
 
@@ -91,7 +91,38 @@ Results:
 
 ## Live deployment evidence
 
-Pending production upload and live identity checks.
+- Uploaded only `dist/site/` to the existing Azure Static Web App
+  `sf-transcript-tidy-reader`. No DNS, shared app, database, key vault, or
+  unrelated resource was read or changed.
+- Production URL: <https://transcript-tidy-reader.sociobot.in/>.
+- `/`, `/demo/`, `/privacy/`, `/terms/`, `/404.html`, and the ZIP return 200.
+  An unknown path returns the designed page with HTTP 404.
+- The live ZIP returns `application/zip`, is 23,356 bytes, passes `unzip -t`,
+  and contains `manifest.json` plus `INSTALL.txt`.
+- `/opt/fleet/lib/verify-url.sh` passed: 576 ms observed load, correct title,
+  `lang=en`, one h1, main landmark, complete alt text, labelled buttons, and no
+  console errors.
+- Fresh live Chromium checks passed at 1440×1000 and 390×844 for all routes:
+  zero unexpected console errors, zero serious/critical axe findings, one h1,
+  and no horizontal overflow. Every route also has `scrollWidth=195` at the
+  195 px reflow width.
+- The live demo produced two “pause” matches, reset to its initial state, and
+  left localStorage, sessionStorage, and IndexedDB empty.
+- A fresh service-worker context updated, took control, went offline, and
+  reloaded the full landing shell with the correct heading.
+- A complete live browsing pass made no cross-origin request.
+- Live response headers include the self CSP, `frame-ancestors 'none'`, HSTS,
+  `nosniff`, strict-origin referrer policy, and denied camera, microphone, and
+  geolocation permissions. AVIF is served as `image/avif`; hashed assets use
+  one-year immutable caching; HTML and the service worker revalidate after 30
+  seconds.
+- Live Lighthouse 13 mobile: Performance 100, Accessibility 100, Best
+  Practices 100, SEO 100; FCP 1.0 s, LCP 1.2 s, TBT 30 ms, CLS 0, 87 KiB.
+- Live/local SHA-256 identities match exactly:
+  - `index.html`: `5fe32cc50999e4a4db357274c7a6f78b6141c606f2e8d11b7faaa9d24ca8da12`
+  - `sw.js`: `25a4faa8ce447e4d19e0d9019f3233504beb5e10dd331007e01cd863a7eafece`
+  - extension ZIP: `fbc10fb1a827cbc58787a2dfb985a593a5f8524522df13faa097e1ffd43e1ccc`
+- Active service-worker cache: `transcript-tidy-site-6fb6c47b141b`.
 
 ## Known limits and next step
 
