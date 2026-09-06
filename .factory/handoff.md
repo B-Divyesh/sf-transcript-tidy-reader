@@ -1,14 +1,14 @@
-# Transcript Tidy — verification 5 handoff
+# Transcript Tidy — review 1 handoff
 
 Date: 6 September 2026 UTC
 Implementation reviewed: `3594788032957fa7aabe340d9c2f375ff8fa54e0`
-Documentation reviewed: `8d8237ae0e40d0c67c0ca223e7780810527545d4`
+Documentation baseline reviewed: `1ce8e19c62ce349c0605b5bfd2700ef9e4a9b5f6`
 
 ## Done
 
-Independent QA of the live static site and clean checkout is complete with a
-**PASS**: zero findings and zero untested public claims. Product code was not
-changed.
+Strict follow-up QA of the live static site, downloadable extension, and clean
+checkout is complete with a **PASS**: zero findings and zero untested public
+claims. Product code was not changed.
 
 The extension remains a local caption reader for accessible YouTube and TED
 caption tracks. The live site offers a one-click isolated sample reader at
@@ -33,15 +33,17 @@ npm audit --omit=dev --audit-level=high
 npm audit --audit-level=high
 ```
 
-All commands passed in this verification. All nine exact commands declared in
+All commands passed in this review. All nine exact commands declared in
 `.factory/claims.json` also passed independently. `npm run build` creates
 `dist/site/` and the downloadable ZIP under
 `dist/site/downloads/transcript-tidy-chrome.zip`.
 
-Live checks passed for desktop and 390 px phone flows, accessibility, keyboard
-focus, 200% reflow, privacy, offline reload, legal pages, expected designed
-404 recovery, and build hashes. The full report is
-`.factory/verification-5.md`; the factory evidence copies are
+Live checks passed for fresh desktop and 390 px phone flows, the one-click
+demo's isolated storage, accessibility, keyboard focus, 200% reflow, privacy,
+offline reload, legal pages, expected designed 404 recovery, and build hashes.
+The live ZIP was extracted and loaded in a new Chromium profile; a 2,000-cue
+capture and source-error recovery paths passed. The full report is
+`.factory/review-1.md`; factory evidence copies are
 `/work/.evidence/qa-report.md` and `/work/.evidence/qa-result.json`.
 
 ## Remaining external dependency
