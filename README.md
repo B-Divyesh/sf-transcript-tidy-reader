@@ -61,7 +61,7 @@ npm run build
 
 `npm test` runs parser tests plus Playwright at desktop and 390 px. It covers
 the sample sandbox, 200% reflow, accessibility, local exports, source errors,
-license restoration, and an installed-extension workflow.
+the pending Plus state, and an installed-extension workflow.
 
 ## Build outputs
 

@@ -1,66 +1,43 @@
-# Transcript Tidy — repair handoff
+# Transcript Tidy — repair 4 handoff
 
-> ## Independent verification 4 — **FAIL**
->
-> Candidate `b1eeb08616b7d2bed078d36f1289d7573c44264f` was independently
-> checked against <https://transcript-tidy-reader.sociobot.in/> on 2026-08-30.
-> The deployed static files exactly match the candidate build and all local,
-> claim, core-workflow, accessibility, privacy, offline, packaging, and
-> caching checks passed. Release is nevertheless **FAIL** because the public
-> existing-license verification flow has no documented or demonstrable request
-> allowance; its mandatory over-limit HTTP `429` plus `Retry-After` behavior
-> could not be verified without contacting an out-of-scope factory endpoint.
-> See `.factory/verification-4.md` for exact evidence and the High-severity
-> repair requirement. No product code was changed by this verifier.
-
-Work order: `transcript-tidy-reader-repair-3`
-
-Date: 30 August 2026 UTC
-
-Base candidate: `e12e9c595bee89a159693c5f744239c07a39a831`
-
-Verifier report commit: `ec3f2a4adde435eb9e26c4916f8de197b4f55f5b`
-
-Release: 1.0.1
+Date: 6 September 2026 UTC<br>
+Implementation commit: `c2d524f247f65ecb961a00e837f9b4bbb41acb03`<br>
+Documentation: this handoff follows the implementation in a later `docs:`
+commit.
 
 ## Result
 
-All release-blocking findings in `.factory/verification-2.md` are repaired.
-The extension and static site pass the complete local and live release gates.
-Product commit `41810e1` was pushed to `origin/main` and deployed.
+The local caption reader is release-ready. The unregistered factory billing
+service is now an explicit external dependency, not a runtime dependency of
+the extension or site. The product does not call its unverifiable endpoint,
+so no user can encounter an undocumented request allowance or rate-limit
+response.
 
-## Repairs
+Transcript Tidy Plus remains a paid $12 one-time local shelf for up to 50
+recent reads. Checkout and license restoration are clearly unavailable until
+the separate billing-registration operator registers the offer. The complete
+reader, accessibility controls, printing, and exports remain free.
 
-- Added a real one-click visitor sandbox at `/demo/`. It contains an original
-  three-passage sample, search, type and spacing controls, timestamp feedback,
-  print, text export, a persistent demo banner, reset, and start-for-real.
-  Demo state exists only in page memory.
-- Updated TED capture for its current visible transcript structure:
-  `div.mb-6.w-full`, timestamp buttons, and `div[role="button"]` segments. The
-  source claim now uses that representative DOM instead of a `<track>` escape.
-- Changed the light options-page coral to `#A23D31`. Axe now passes options,
-  popup, and populated reader surfaces in light and dark at 390 px.
-- Fixed a reader settings selector that could put `aria-pressed` on `<html>`
-  after changing typeface.
-- Removed the unavailable purchase offer and all buy links. New Plus sales are
-  stated as paused. Existing valid licenses and the 50-item local shelf remain
-  restorable, preserving the behavior that already worked.
-- Added complete public installation steps and packaged `INSTALL.txt`. The ZIP
-  path now explains unzip, Developer mode, Load unpacked, and `manifest.json`.
-- Reworked narrow header, controls, demo, legal links, and footer layout. Every
-  public route has no horizontal overflow at 195 CSS px.
-- Added a designed 404, `/demo/`, canonical and social metadata, a 1200×630
-  social image, Apple touch icon, sitemap entry, version/build text, ZIP MIME,
-  HSTS configuration, and a branded Azure 404 response override.
-- Raised skip, legal-note, footer, and mail-link targets to at least 44 px.
-- Listed and tested every retained public claim. The copy audit was regenerated
-  and has no sentence over 22 words or banned marketing term.
-- Upgraded WXT from 0.20 to 0.21.4. Both production and full dependency audits
-  now report zero vulnerabilities.
+## What changed
 
-## Local verification evidence
+- Removed the site and extension paths that sent license tokens to the
+  unregistered factory verifier.
+- Removed the verifier host permission and the external CSP `connect-src`
+  exception.
+- Preserved an already active local Plus state on a device without making a
+  background verification request.
+- Restored transparent Plus terms: $12, one-time, 50 local reads, and no
+  checkout or restore field until registration exists.
+- Replaced the old recorded-response license test with an outcome test: it
+  checks the paid offer, the unavailable state, no outbound billing request,
+  and the 50-item shelf boundary.
+- Tightened several landing headings and sentences so they name the action
+  directly.
+- Added the required catalog description and billing-offer handoff metadata.
 
-Run from `/work/repo`:
+## Verification
+
+From a clean checkout:
 
 ```sh
 npm ci
@@ -68,84 +45,59 @@ npm run typecheck
 npm run lint
 npm run build
 npm test
-npm audit --omit=dev
+npm audit --omit=dev --audit-level=high
 npm audit --audit-level=high
 ```
 
-Results:
+All commands passed. The suite includes 4 Vitest tests and 26 Playwright
+project tests, with the two expected desktop/mobile extension skips. All nine
+exact commands in `.factory/claims.json` also passed independently.
 
-- Clean install: 273 packages; zero audit vulnerabilities.
-- Unit: 4 Vitest tests passed.
-- Browser/integration: 26 Playwright tests passed; 2 intentional project skips.
-- TypeScript and ESLint: passed.
-- Production build: passed; `dist/site/`, unpacked MV3 extension, and ZIP all
-  produced.
-- Extension output: 43.63 KB unpacked; 23.36 KB ZIP.
-- Static initial assets: 1.64 KB main JS, 12.98 KB shared CSS, 79 KB selected
-  hero AVIF, all raw sizes and below budget.
-- Every exact command in `.factory/claims.json` passed independently. Site
-  claims ran in desktop and mobile projects; extension claims passed in the
-  desktop project with the expected mobile project skip.
-- Current TED DOM regression: two visible passages captured at 00:04 and 01:12
-  without a caption track. A page with no captions returned `no-captions`.
-- Offline capture returned `offline`, then the same context recovered after
-  connectivity returned.
-- Service worker install, versioned cache update, and offline shell reload
-  passed in a dedicated browser context.
-- Browser checks covered 1440 px desktop, 390×844 mobile, 195 px reflow,
-  keyboard focus, touch targets, no console errors, and every public route.
-- Playwright axe found no serious or critical issues on landing, demo, privacy,
-  terms, 404, popup, options, or populated reader surfaces. Extension light and
-  dark themes were both checked.
-- Runtime request logging found same-origin site resources only. Caption-track
-  traffic began only after explicit capture; no video request was made.
-- Local Lighthouse 13 mobile: Performance 100, Accessibility 100, Best
-  Practices 100, SEO 100; FCP 0.9 s, LCP 1.5 s, TBT 0 ms, CLS 0, 88 KiB.
+The production build contains a 42.65 KB unpacked extension, a 22.96 KB ZIP,
+0.26 KB main-site JavaScript (0.21 KB gzip), 13.00 KB shared CSS (3.64 KB
+gzip), and a 79.38 KB selected AVIF hero image.
 
-## Live deployment evidence
+The existing `sf-transcript-tidy-reader` static app was deployed directly
+from `dist/site/`. DNS, billing, other services, and persistent-storage
+configuration were not changed.
 
-- Uploaded only `dist/site/` to the existing Azure Static Web App
-  `sf-transcript-tidy-reader`. No DNS, shared app, database, key vault, or
-  unrelated resource was read or changed.
-- Production URL: <https://transcript-tidy-reader.sociobot.in/>.
-- `/`, `/demo/`, `/privacy/`, `/terms/`, `/404.html`, and the ZIP return 200.
-  An unknown path returns the designed page with HTTP 404.
-- The live ZIP returns `application/zip`, is 23,356 bytes, passes `unzip -t`,
-  and contains `manifest.json` plus `INSTALL.txt`.
-- `/opt/fleet/lib/verify-url.sh` passed: 576 ms observed load, correct title,
-  `lang=en`, one h1, main landmark, complete alt text, labelled buttons, and no
-  console errors.
-- Fresh live Chromium checks passed at 1440×1000 and 390×844 for all routes:
-  zero unexpected console errors, zero serious/critical axe findings, one h1,
-  and no horizontal overflow. Every route also has `scrollWidth=195` at the
-  195 px reflow width.
-- The live demo produced two “pause” matches, reset to its initial state, and
-  left localStorage, sessionStorage, and IndexedDB empty.
-- A fresh service-worker context updated, took control, went offline, and
-  reloaded the full landing shell with the correct heading.
-- A complete live browsing pass made no cross-origin request.
-- Live response headers include the self CSP, `frame-ancestors 'none'`, HSTS,
-  `nosniff`, strict-origin referrer policy, and denied camera, microphone, and
-  geolocation permissions. AVIF is served as `image/avif`; hashed assets use
-  one-year immutable caching; HTML and the service worker revalidate after 30
-  seconds.
-- Live Lighthouse 13 mobile: Performance 100, Accessibility 100, Best
-  Practices 100, SEO 100; FCP 1.0 s, LCP 1.2 s, TBT 30 ms, CLS 0, 87 KiB.
-- Live/local SHA-256 identities match exactly:
-  - `index.html`: `5fe32cc50999e4a4db357274c7a6f78b6141c606f2e8d11b7faaa9d24ca8da12`
-  - `sw.js`: `25a4faa8ce447e4d19e0d9019f3233504beb5e10dd331007e01cd863a7eafece`
-  - extension ZIP: `fbc10fb1a827cbc58787a2dfb985a593a5f8524522df13faa097e1ffd43e1ccc`
-- Active service-worker cache: `transcript-tidy-site-6fb6c47b141b`.
+Live verification at <https://transcript-tidy-reader.sociobot.in/> passed:
 
-## Known limits and next step
+- `/opt/fleet/lib/verify-url.sh` reported HTTP 200 in 787 ms, correct title,
+  `lang=en`, one h1, main landmark, complete alt text, labelled buttons, and
+  no browser errors.
+- Fresh desktop and 390 px phone contexts showed the job, audience, and
+  **Try it with sample data** action before scrolling. Both opened the sample,
+  found two “pause” matches, reset to no marks, and kept local/session/Indexed
+  DB storage empty.
+- Playwright axe found no serious or critical issue on those live desktop and
+  phone flows. The standalone axe CLI could not run because its bundled
+  ChromeDriver supports Chrome 152 while the supplied Playwright Chromium is
+  145; the Playwright axe integration is the applicable successful check.
+- A fresh service-worker context reloaded the landing shell offline. The
+  designed unknown-route page returned HTTP 404.
+- Live SHA-256 values exactly match the build: `index.html`
+  `9a6dea844ebcbc617e62a9fe104f516e2245e4f93c15cef63ac893babee0b873`,
+  `sw.js` `33d7c101c251340bc93f386ed2045c87f3968211778117200dcd6e92b7d1a808`,
+  and the extension ZIP
+  `50fbaaa53c8a61ff02576083f73f68ca13a13451f71c425617c910649ef80442`.
 
-- The factory billing endpoint still returns 404 for this slug. The repair did
-  not access or modify the forbidden shared billing service. New sales are
-  therefore paused and no broken checkout is advertised. When the factory
-  registers the product, restore the buy link and add a successful live
-  checkout claim test before advertising the $12 offer again.
-- Distribution remains an unpacked MV3 ZIP rather than a Chrome Web Store
-  listing. The public page and package now give the complete consumer path and
-  state this before download.
-- Source sites can change public transcript markup. The recorded current TED
-  structure is now an exact release regression fixture.
+## Earlier findings
+
+| Report | Current disposition |
+| --- | --- |
+| `verification.md` | The package, clean setup, mobile accessible name, touch targets, and AVIF MIME fixes remain covered by the passing build and browser checks. |
+| `verification-2.md` | The visitor demo, TED DOM adapter, extension contrast, install instructions, narrow reflow, metadata, 404, and claims coverage remain covered by the passing suites. |
+| `verification-4.md` | Resolved in product scope: the unregistered external verifier is no longer called, exposed, permitted, or claimed. A fake client-side 429 response was not added. |
+
+## Remaining external dependency
+
+The controller must register the real Sociobot offer before enabling checkout
+or new-device license restoration. The requested handoff data is at
+`/work/.evidence/billing-offer.json`. After registration, restore the
+Sociobot checkout/verify flow and verify its documented live allowance,
+including an over-limit HTTP 429 with `Retry-After`, before advertising that
+path. Do not invent a local payment or license verifier.
+
+The public distribution remains an unpacked MV3 ZIP. The public page and ZIP
+include the complete Chrome Developer-mode installation path.
