@@ -165,11 +165,13 @@ test('versioned service worker reloads the shell offline in its own browser cont
 test('@claim:plus-shelf Plus keeps its paid local shelf without an unavailable billing call', async ({ page }) => {
   const outgoingRequests: string[] = [];
   page.on('request', (request) => outgoingRequests.push(request.url()));
-  await page.goto('/#plus');
+  await page.goto('/?license=previous-purchase-token#plus');
+  await expect(page).toHaveURL('http://127.0.0.1:4173/#plus');
   await expect(page.getByRole('heading', { name: 'Keep 50 recent reads with Plus.' })).toBeVisible();
   await expect(page.getByText('One-time purchase. No subscription.')).toBeVisible();
   await expect(page.getByText(/billing registration is pending/i)).toBeVisible();
   await expect(page.locator('a[href*="checkout"], a[href*="api.sociobot.in"], form input[name="license"]')).toHaveCount(0);
+  expect(await page.evaluate(() => Object.keys(localStorage))).toEqual([]);
   expect(outgoingRequests.every((url) => new URL(url).origin === 'http://127.0.0.1:4173')).toBe(true);
   const transcript = (id: string): Transcript => ({
     id,
