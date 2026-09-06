@@ -57,16 +57,9 @@
   },
   {
     "id": "plus-shelf",
-    "claim": "New Plus sales are paused; an existing valid license keeps up to 50 recent reads on the device.",
-    "where": "Landing license section, options, terms, and README",
+    "claim": "Transcript Tidy Plus is a $12 one-time local shelf for up to 50 recent reads; checkout and license restoration wait for factory billing registration.",
+    "where": "Landing Plus section, popup, terms, and README",
     "test": "npm test -- --grep @claim:plus-shelf",
-    "sandbox": "Fresh site context with a recorded valid verification response plus 50 deterministic transcript objects."
-  },
-  {
-    "id": "license-restore",
-    "claim": "A returned valid Plus license is stored locally and removed from the address bar; an invalid license stays inactive.",
-    "where": "Landing license form and existing purchase return flow",
-    "test": "npm test -- --grep @claim:license-restore",
-    "sandbox": "Fresh browser context with a recorded valid Sociobot verification response; no live billing request."
+    "sandbox": "Fresh site context confirms the one-time offer and unavailable state without a checkout or token field; deterministic transcript objects prove the local shelf keeps 50 reads."
   }
 ]

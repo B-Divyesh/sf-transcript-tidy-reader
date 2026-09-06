@@ -12,8 +12,7 @@ export default defineConfig({
       'https://youtu.be/*',
       'https://www.ted.com/*',
       'https://ted.com/*',
-      'https://*.googlevideo.com/*',
-      'https://api.sociobot.in/*'
+      'https://*.googlevideo.com/*'
     ],
     action: {
       default_title: 'Open Transcript Tidy',

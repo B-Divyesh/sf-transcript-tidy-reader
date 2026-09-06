@@ -1,12 +1,10 @@
-import { getLicenseState, saveAndVerifyLicense } from '../../src/license';
+import { getLicenseState } from '../../src/license';
 import { addToShelf } from '../../src/shelf';
 import type { CaptureResult, Transcript } from '../../src/types';
 import './style.css';
 
 const button = document.querySelector<HTMLButtonElement>('#tidy')!;
 const status = document.querySelector<HTMLElement>('#status')!;
-const restore = document.querySelector<HTMLFormElement>('#restore')!;
-const licenseInput = document.querySelector<HTMLInputElement>('#license')!;
 const licenseStatus = document.querySelector<HTMLElement>('#license-status')!;
 
 void getLicenseState().then((state) => {
@@ -40,14 +38,6 @@ button.addEventListener('click', async () => {
     button.disabled = false;
     button.innerHTML = '<span aria-hidden="true">↗</span> Tidy this transcript';
   }
-});
-
-restore.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  licenseStatus.textContent = 'Checking license…';
-  const result = await saveAndVerifyLicense(licenseInput.value);
-  licenseStatus.textContent = result.valid ? 'Plus is active on this device.' : result.reason;
-  if (result.valid) licenseInput.value = '';
 });
 
 function showError(message: string) {

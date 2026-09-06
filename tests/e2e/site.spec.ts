@@ -162,30 +162,15 @@ test('versioned service worker reloads the shell offline in its own browser cont
   }
 });
 
-test('@claim:license-restore license return is saved and stripped from the URL', async ({ page }) => {
-  await page.route('https://api.sociobot.in/**', (route) => route.fulfill({ json: { valid: true, reason: 'ok', expires_at: null } }));
-  await page.goto('/?license=test-token');
-  await expect(page).toHaveURL('http://127.0.0.1:4173/');
-  await expect(page.locator('#license-status')).toContainText('License verified');
-  expect(await page.evaluate(() => localStorage.getItem('sb_license:transcript-tidy-reader'))).toBe('test-token');
-  await page.unroute('https://api.sociobot.in/**');
-  await page.route('https://api.sociobot.in/**', (route) => route.fulfill({ json: { valid: false, reason: 'revoked', expires_at: null } }));
-  await page.getByLabel('Paste your existing license').fill('revoked-token');
-  await page.getByRole('button', { name: 'Restore license' }).click();
-  await expect(page.locator('#license-status')).toContainText('no longer active');
-  expect(JSON.parse(await page.evaluate(() => localStorage.getItem('sb_license:transcript-tidy-reader:verdict')) ?? '{}')).toMatchObject({ valid: false, reason: 'revoked' });
-});
-
-test('@claim:plus-shelf an existing valid Plus license keeps at most 50 reads', async ({ page }) => {
-  await page.route('https://api.sociobot.in/**', (route) => route.fulfill({ json: { valid: true, reason: 'ok', expires_at: null } }));
-  await page.goto('/#license-restore');
-  await expect(page.getByRole('heading', { name: 'Restore a shelf you already bought.' })).toBeVisible();
-  await expect(page.getByText(/Existing licenses still add a private shelf of up to 50/)).toBeVisible();
-  await expect(page.getByText('New Plus sales are paused.')).toBeVisible();
-  await expect(page.getByRole('link', { name: /Buy Transcript Tidy Plus/ })).toHaveCount(0);
-  await page.getByLabel('Paste your existing license').fill('existing-valid-token');
-  await page.getByRole('button', { name: 'Restore license' }).click();
-  await expect(page.locator('#license-status')).toContainText('License verified');
+test('@claim:plus-shelf Plus keeps its paid local shelf without an unavailable billing call', async ({ page }) => {
+  const outgoingRequests: string[] = [];
+  page.on('request', (request) => outgoingRequests.push(request.url()));
+  await page.goto('/#plus');
+  await expect(page.getByRole('heading', { name: 'Keep 50 recent reads with Plus.' })).toBeVisible();
+  await expect(page.getByText('One-time purchase. No subscription.')).toBeVisible();
+  await expect(page.getByText(/billing registration is pending/i)).toBeVisible();
+  await expect(page.locator('a[href*="checkout"], a[href*="api.sociobot.in"], form input[name="license"]')).toHaveCount(0);
+  expect(outgoingRequests.every((url) => new URL(url).origin === 'http://127.0.0.1:4173')).toBe(true);
   const transcript = (id: string): Transcript => ({
     id,
     title: `Talk ${id}`,
@@ -209,5 +194,5 @@ test('legal pages are complete', async ({ page }) => {
   await expect(page.getByText('Where transcript text goes')).toBeVisible();
   await page.goto('/terms/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Terms');
-  await expect(page.getByRole('heading', { name: 'Existing Plus licenses' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Transcript Tidy Plus' })).toBeVisible();
 });

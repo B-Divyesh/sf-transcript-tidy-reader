@@ -35,10 +35,12 @@ Capture, paragraph reflow, search, storage, and export stay in the browser.
 Transcript text is not sent to Transcript Tidy. Caption requests start only
 after the visitor selects the extension.
 
-The site has no analytics, remote fonts, or third-party runtime scripts. An
-existing Plus license may be verified through the Sociobot billing API. New
-Plus sales are paused while checkout is unavailable. Existing valid licenses
-still keep up to 50 recent reads on the device.
+The site has no analytics, remote fonts, or third-party runtime scripts.
+
+Transcript Tidy Plus is a $12 one-time local shelf for up to 50 recent reads.
+Factory billing registration is pending, so checkout and license restoration
+are unavailable. The site and extension make no license-check request while
+that dependency is unavailable.
 
 See [`site/privacy/index.html`](site/privacy/index.html) and
 [`site/terms/index.html`](site/terms/index.html).
@@ -75,6 +77,7 @@ license restoration, and an installed-extension workflow.
 - Vite + plain TypeScript and CSS static site
 - Browser extension storage; no server database
 - YouTube `json3`, WebVTT, and current visible-transcript adapters
+- Plus billing is a pending Sociobot registration, not a substitute checkout
 
 Deploy `dist/site/` as the static root for
 `sf-transcript-tidy-reader`. The factory owns DNS, hosting, billing
