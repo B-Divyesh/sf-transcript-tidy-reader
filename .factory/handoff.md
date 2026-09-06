@@ -1,7 +1,7 @@
 # Transcript Tidy — repair 4 handoff
 
 Date: 6 September 2026 UTC<br>
-Implementation commit: `c2d524f247f65ecb961a00e837f9b4bbb41acb03`<br>
+Implementation commit: `3594788032957fa7aabe340d9c2f375ff8fa54e0`<br>
 Documentation: this handoff follows the implementation in a later `docs:`
 commit.
 
@@ -26,6 +26,8 @@ reader, accessibility controls, printing, and exports remain free.
   exception.
 - Preserved an already active local Plus state on a device without making a
   background verification request.
+- Strip a legacy `?license=` return token from the address bar without saving
+  it or making a billing request.
 - Restored transparent Plus terms: $12, one-time, 50 local reads, and no
   checkout or restore field until registration exists.
 - Replaced the old recorded-response license test with an outcome test: it
@@ -54,7 +56,7 @@ project tests, with the two expected desktop/mobile extension skips. All nine
 exact commands in `.factory/claims.json` also passed independently.
 
 The production build contains a 42.65 KB unpacked extension, a 22.96 KB ZIP,
-0.26 KB main-site JavaScript (0.21 KB gzip), 13.00 KB shared CSS (3.64 KB
+0.35 KB main-site JavaScript (0.26 KB gzip), 13.00 KB shared CSS (3.64 KB
 gzip), and a 79.38 KB selected AVIF hero image.
 
 The existing `sf-transcript-tidy-reader` static app was deployed directly
@@ -63,7 +65,7 @@ configuration were not changed.
 
 Live verification at <https://transcript-tidy-reader.sociobot.in/> passed:
 
-- `/opt/fleet/lib/verify-url.sh` reported HTTP 200 in 787 ms, correct title,
+- `/opt/fleet/lib/verify-url.sh` reported HTTP 200 in 737 ms, correct title,
   `lang=en`, one h1, main landmark, complete alt text, labelled buttons, and
   no browser errors.
 - Fresh desktop and 390 px phone contexts showed the job, audience, and
@@ -76,9 +78,11 @@ Live verification at <https://transcript-tidy-reader.sociobot.in/> passed:
   145; the Playwright axe integration is the applicable successful check.
 - A fresh service-worker context reloaded the landing shell offline. The
   designed unknown-route page returned HTTP 404.
+- A legacy `?license=` return URL is stripped in a fresh browser without local
+  storage or an external request.
 - Live SHA-256 values exactly match the build: `index.html`
-  `9a6dea844ebcbc617e62a9fe104f516e2245e4f93c15cef63ac893babee0b873`,
-  `sw.js` `33d7c101c251340bc93f386ed2045c87f3968211778117200dcd6e92b7d1a808`,
+  `b11e74a7d05ffbd01a62cc37492e016a87d1cf2a4e5d53cae5d9b10242eec9de`,
+  `sw.js` `42db81cc91fe86cc7c0276a848d64e26284b6732537ec4cf126b7c852ea1c121`,
   and the extension ZIP
   `50fbaaa53c8a61ff02576083f73f68ca13a13451f71c425617c910649ef80442`.
 

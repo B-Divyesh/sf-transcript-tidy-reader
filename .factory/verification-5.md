@@ -1,7 +1,7 @@
 # Independent verification 5 — repair evidence
 
 Date: 6 September 2026 UTC<br>
-Implementation candidate: `c2d524f247f65ecb961a00e837f9b4bbb41acb03`<br>
+Implementation candidate: `3594788032957fa7aabe340d9c2f375ff8fa54e0`<br>
 URL: <https://transcript-tidy-reader.sociobot.in/>
 
 ## Result
@@ -37,6 +37,8 @@ continues to work end to end.
   product finding.
 - A separate fresh service-worker context reloaded the landing page offline.
   `/not-a-real-route` returned the designed page with HTTP 404.
+- A legacy `?license=` return URL is removed without local storage or an
+  external request.
 - The local and live index, service worker, and ZIP SHA-256 values match.
 
 ## Billing dependency
